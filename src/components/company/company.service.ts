@@ -15,6 +15,8 @@ export class CompanyService {
     const company = this.companyRepository.create({
       name,
       manager: { id: managerId },
+      createdBy: { id: managerId },
+      updatedBy: { id: managerId },
     });
     return await this.companyRepository.save(company);
   }
