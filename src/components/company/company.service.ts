@@ -11,8 +11,11 @@ export class CompanyService {
     private readonly companyRepository: Repository<Company>
   ) {}
 
-  async createCompany(payload: ICreateCompany): Promise<Company> {
-    const company = this.companyRepository.create({});
+  async createCompany({ name, managerId }: ICreateCompany): Promise<Company> {
+    const company = this.companyRepository.create({
+      name,
+      manager: { id: managerId },
+    });
     return await this.companyRepository.save(company);
   }
 }

@@ -3,9 +3,9 @@ interface IUserCommon {
   email: string;
   password: string;
 }
-interface IEditUser extends IUserCommon {
+interface IEditUser extends Omit<IUserCommon, "password"> {
   id: number;
-  updatedBy: string;
+  updatedBy: number;
 }
 interface ICreateUser extends IUserCommon {}
 export type { IEditUser, ICreateUser };

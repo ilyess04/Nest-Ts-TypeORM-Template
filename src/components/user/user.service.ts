@@ -31,9 +31,12 @@ export class UserService {
     });
   }
 
-  async updateUser(user: IEditUser): Promise<User> {
-    await this.userRepository.update(user.id, {});
-    return this.userRepository.findOne({ where: { id: user.id } });
+  async updateUser({ id, updatedBy, ...user }: IEditUser): Promise<User> {
+    await this.userRepository.update(id, {
+      ...user,
+      updatedBy: { id: updatedBy },
+    });
+    return this.userRepository.findOne({ where: { id } });
   }
 
   async createUser(payload: ICreateUser): Promise<User> {

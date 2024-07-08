@@ -10,7 +10,6 @@ export class Company extends CommonModel {
     nullable: false,
   })
   name: string;
-
-  @ManyToOne(() => User, { nullable: false })
+  @ManyToOne(() => User, (user) => user.companies, { nullable: false })
   manager: User;
 }

@@ -5,22 +5,18 @@ import { User } from "../user.entity";
 export class CommonModel {
   @PrimaryGeneratedColumn()
   id: number;
-
   @Column({
     type: "boolean",
     default: false,
   })
   isArchived: boolean;
-
   @Column({
     type: "boolean",
     default: false,
   })
   isDeleted: boolean;
-
   @ManyToOne(() => User)
   createdBy: User;
-
   @ManyToOne(() => User)
   updatedBy: User;
 }

@@ -7,5 +7,5 @@ export class CreateCompanyDto {
   name: string;
   @IsNumber()
   @ApiProperty()
-  manager: number;
+  managerId: number;
 }

@@ -1,5 +1,6 @@
-import { Entity, Column } from "typeorm";
+import { Entity, Column, OneToMany } from "typeorm";
 import { CommonModel } from "./common/common.entity";
+import { Company } from "./company.entity";
 
 @Entity()
 export class User extends CommonModel {
@@ -9,7 +10,6 @@ export class User extends CommonModel {
     nullable: false,
   })
   fullName: string;
-
   @Column({
     type: "varchar",
     length: 255,
@@ -24,4 +24,6 @@ export class User extends CommonModel {
     select: true,
   })
   password: string;
+  @OneToMany(() => Company, (company) => company.manager)
+  companies: Company[];
 }
