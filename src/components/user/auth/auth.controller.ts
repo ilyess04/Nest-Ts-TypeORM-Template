@@ -82,7 +82,7 @@ export class AuthController {
       description: 'something went wrong!',
     },
   )
-  async CreateUser(@Res() res: Response, @Body() body: CreateUserDto) {
+  async register(@Res() res: Response, @Body() body: CreateUserDto) {
     try {
       const cryptedPassword = await this.authService.hashPassword(
         body.password,
@@ -117,7 +117,7 @@ export class AuthController {
       description: 'something went wrong!',
     },
   )
-  public async sendEmailReset(@Res() res: Response, @Body() body: SendMailDto) {
+  public async forgotPassword(@Res() res: Response, @Body() body: SendMailDto) {
     const { email } = body;
     try {
       const user = await this.userService.getUserByMail(email);
