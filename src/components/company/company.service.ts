@@ -1,15 +1,18 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { Model } from 'mongoose';
-import { ICreateCompany } from 'src/common/interfaces/company';
-import { Company } from 'src/common/mongoose/models/company.model';
-import { COMPANY_PROVIDER } from 'src/config';
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { ICreateCompany } from "src/common/interfaces/company";
+import { Company } from "src/common/orm/entities/company.entity";
 
 @Injectable()
 export class CompanyService {
   constructor(
-    @Inject(COMPANY_PROVIDER) private readonly companyModel: Model<Company>,
+    @InjectRepository(Company)
+    private readonly companyRepository: Repository<Company>
   ) {}
+
   async createCompany(payload: ICreateCompany): Promise<Company> {
-    return await this.companyModel.create(payload);
+    const company = this.companyRepository.create({});
+    return await this.companyRepository.save(company);
   }
 }

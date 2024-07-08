@@ -1,7 +1,7 @@
-import { User } from 'src/common/mongoose/models/user.model';
+import { User } from "src/common/orm/entities/user.entity";
 
 interface IJwtPayloadUser {
-  userId: string;
+  userId: number;
   refresh?: boolean;
 }
 interface IRequest extends Request {

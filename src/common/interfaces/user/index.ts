@@ -4,7 +4,7 @@ interface IUserCommon {
   password: string;
 }
 interface IEditUser extends IUserCommon {
-  _id: string;
+  id: number;
   updatedBy: string;
 }
 interface ICreateUser extends IUserCommon {}

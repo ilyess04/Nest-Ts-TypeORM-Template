@@ -1,14 +1,22 @@
-import { Module } from '@nestjs/common';
-import { DatabaseProviders } from './database.provider';
-import { ConfigModule } from '@nestjs/config';
-import { MongooseModule } from '@nestjs/mongoose';
+import { Module } from "@nestjs/common";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { User } from "../entities/user.entity";
+import { Company } from "../entities/company.entity";
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
-    MongooseModule.forRoot(process.env.DB_CONNECT),
+    TypeOrmModule.forRoot({
+      type: (process.env.DB_TYPE as any) || "postgres",
+      host: process.env.DB_HOST,
+      port: parseInt(process.env.DB_PORT) || 3306,
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_DATABASE,
+      synchronize: process.env.DB_SYNCHRONIZE === "true",
+      entities: [User, Company],
+    }),
   ],
-  providers: [...DatabaseProviders],
-  exports: [...DatabaseProviders],
+  providers: [],
+  exports: [],
 })
 export class DatabaseModule {}

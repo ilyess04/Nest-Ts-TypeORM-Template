@@ -1,5 +1,5 @@
 interface ICreateCompany {
   name: string;
-  manager: string;
+  manager: number;
 }
 export type { ICreateCompany };

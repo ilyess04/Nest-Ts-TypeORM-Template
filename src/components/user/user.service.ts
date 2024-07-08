@@ -1,34 +1,43 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { Model } from 'mongoose';
-import { ICreateUser, IEditUser } from 'src/common/interfaces/user';
-import { User } from 'src/common/mongoose/models/user.model';
-import { USER_PROVIDER } from 'src/config';
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { ICreateUser, IEditUser } from "src/common/interfaces/user";
+import { User } from "src/common/orm/entities/user.entity";
 
 @Injectable()
 export class UserService {
-  constructor(@Inject(USER_PROVIDER) private readonly userModel: Model<User>) {}
+  constructor(
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>
+  ) {}
+
   async getUserByMail(email: string): Promise<User> {
-    return await this.userModel.findOne({
-      email,
-      isArchived: false,
-      isDeleted: false,
+    return await this.userRepository.findOne({
+      where: {
+        email,
+        isArchived: false,
+        isDeleted: false,
+      },
     });
   }
-  async getUserById(id: string): Promise<User> {
-    return this.userModel.findById(id, { isDeleted: false, isArchived: false });
+
+  async getUserById(id: number): Promise<User> {
+    return await this.userRepository.findOne({
+      where: {
+        id,
+        isArchived: false,
+        isDeleted: false,
+      },
+    });
   }
+
   async updateUser(user: IEditUser): Promise<User> {
-    return await this.userModel
-      .findByIdAndUpdate(
-        user._id,
-        {
-          $set: { ...user },
-        },
-        { new: true },
-      )
-      .exec();
+    await this.userRepository.update(user.id, {});
+    return this.userRepository.findOne({ where: { id: user.id } });
   }
+
   async createUser(payload: ICreateUser): Promise<User> {
-    return await new this.userModel(payload).save();
+    const user = this.userRepository.create(payload);
+    return await this.userRepository.save(user);
   }
 }
