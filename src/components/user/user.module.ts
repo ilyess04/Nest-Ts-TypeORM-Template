@@ -6,10 +6,13 @@ import { AuthService } from "./auth/auth.service";
 import { AuthController } from "./auth/auth.controller";
 import { UserService } from "./user.service";
 import { DatabaseModule } from "src/common/orm/database/database.module";
+import { User } from "src/common/orm/entities/user.entity";
+import { TypeOrmModule } from "@nestjs/typeorm";
 
 @Module({
   imports: [
     DatabaseModule,
+    TypeOrmModule.forFeature([User]),
     PassportModule.register({ defaultStrategy: ["jwt", "refresh"] }),
     JwtModule.register({
       secret: process.env.JWT_SECRET_KEY,
