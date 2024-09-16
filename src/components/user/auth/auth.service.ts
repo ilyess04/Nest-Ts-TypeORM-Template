@@ -5,7 +5,6 @@ import {
 } from "@nestjs/common";
 import * as bcrypt from "bcryptjs";
 import { JwtService } from "@nestjs/jwt";
-import { ACCESS_TOKEN_TIMEOUT, REFRESH_TOKEN_TIMEOUT } from "src/config";
 import { IJwtPayloadUser } from "src/common/interfaces";
 import { UserService } from "../user.service";
 import { User } from "src/common/orm/entities/user.entity";
@@ -27,20 +26,20 @@ export class AuthService {
   }
   async generateToken(user: User): Promise<any> {
     const payload: IJwtPayloadUser = {
-      userId: user["_id"],
+      userId: user.id,
     };
     const accessToken: string = this.jwtService.sign(payload, {
-      expiresIn: ACCESS_TOKEN_TIMEOUT,
+      expiresIn: process.env.ACCESS_TOKEN_TIMEOUT,
     });
     const refreshToken: string = this.jwtService.sign(
       { ...payload, refresh: true },
-      { expiresIn: REFRESH_TOKEN_TIMEOUT }
+      { expiresIn: process.env.REFRESH_TOKEN_TIMEOUT }
     );
     return { accessToken, refreshToken };
   }
   async generateResetPasswordToken(user: User): Promise<string> {
     const payload: IJwtPayloadUser = {
-      userId: user["_id"],
+      userId: user.id,
     };
     const resetPasswordToken = this.jwtService.sign(payload, {
       expiresIn: process.env.RESSET_PASSWORD_TOKEN,
